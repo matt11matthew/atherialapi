@@ -19,10 +19,10 @@ public final class AtherialSpigotApi extends JavaPlugin {
 
         AtherialApi atherialApi = AtherialApi.getInstance();
         atherialApi.setSpigotPlugin(true);
-        atherialApi.loadAddons(file,getClassLoader());
+//        atherialApi.loadAddons(file);
 
 
-    }
+    } 
 
     @Override
     public void onDisable() {
