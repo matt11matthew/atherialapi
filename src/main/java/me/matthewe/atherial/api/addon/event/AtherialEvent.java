@@ -1,4 +1,4 @@
-package me.matthewe.atherial.api.event;
+package me.matthewe.atherial.api.addon.event;
 
 /**
  * Created by Matthew E on 12/30/2017.

@@ -1,11 +1,15 @@
 package me.matthewe.atherial.api.addon;
 
-import me.matthewe.atherial.api.AtherialEventListener;
+import me.matthewe.atherial.api.addon.event.AtherialEvent;
+import me.matthewe.atherial.api.addon.event.AtherialEventHandler;
+import me.matthewe.atherial.api.addon.event.AtherialEventListener;
+import me.matthewe.atherial.api.addon.events.AtherialAddonPreLoadEvent;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -26,10 +30,27 @@ public class AtherialAddonManager {
         return instance;
     }
 
+    public void callEvent(final AtherialEvent event, AtherialAddon addon) {
+        getHandlers(addon).stream().filter(handler -> Arrays.asList(handler.getInterfaces()).contains(AtherialEventListener.class)).forEach(handler -> {
+            Method[] methods = handler.getMethods();
+            Arrays.stream(methods).forEachOrdered(method -> {
+                AtherialEventHandler eventHandler = method.getAnnotation(AtherialEventHandler.class);
+                if (eventHandler != null) {
+                    Class[] methodParams = method.getParameterTypes();
+                    if (methodParams.length < 1 || !event.getClass().getSimpleName().equals(methodParams[0].getSimpleName()))
+                        return;
+                    try {
+                        method.invoke(handler.newInstance(), event);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        });
+    }
 
     public List<Class<? extends AtherialEventListener>> getHandlers(AtherialAddon atherialAddon) {
         return this.atherialEventListeners.get(atherialAddon);
-
     }
 
     public void registerListener(AtherialEventListener listener, AtherialAddon atherialAddon) {
@@ -44,7 +65,6 @@ public class AtherialAddonManager {
             List<Class<? extends AtherialEventListener>> classes = new ArrayList<>();
             classes.add(listener.getClass());
             atherialEventListeners.put(atherialAddon, classes);
-
         }
     }
 
@@ -66,58 +86,37 @@ public class AtherialAddonManager {
     public void loadAddons(File file) {
         System.out.println("[AtherialApi] Loading Addons");
         if (file != null && file.exists() && (file.isDirectory()) && (file.list() != null)) {
-            for (File file1 : file.listFiles()) {
-                if (file1.getName().endsWith(".jar")) {
-                    List<Class> classes = loadClasses(file1);
-                    for (Class aClass : classes) {
-                        for (Annotation annotation : aClass.getAnnotations()) {
-                            if (annotation instanceof AtherialAddonDescription) {
-                                AtherialAddonDescription description = (AtherialAddonDescription) annotation;
-                                try {
-                                    AtherialAddon atherialAddon = (AtherialAddon) aClass.getDeclaredConstructor().newInstance();
-                                    atherialAddon.setDescription(description);
-                                    atherialAddonMap.put(description.name(), atherialAddon);
-                                    System.out.println("[AtherialAddons] Loading " + description.name() + "...");
-                                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            break;
-                        }
+            Arrays.stream(file.listFiles()).filter(file1 -> file1.getName().endsWith(".jar")).map(file1 -> loadClasses(file1, false)).flatMap(Collection::stream).forEachOrdered(aClass -> {
+                Annotation annotation = aClass.getAnnotation(AtherialAddonDescription.class);
+                if (annotation != null && annotation instanceof AtherialAddonDescription) {
+                    AtherialAddonDescription description = (AtherialAddonDescription) annotation;
+                    try {
+                        AtherialAddon atherialAddon = (AtherialAddon) aClass.getDeclaredConstructor().newInstance();
+                        atherialAddon.setDescription(description);
+                        atherialAddonMap.put(description.name(), atherialAddon);
+                        System.out.println("[AtherialAddons] Loading " + description.name() + "...");
+                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                        e.printStackTrace();
                     }
                 }
-            }
+            });
         }
         for (AtherialAddon atherialAddon : atherialAddonMap.values()) {
+            AtherialAddonPreLoadEvent atherialAddonPreLoadEvent = new AtherialAddonPreLoadEvent(atherialAddon);
+            callEvent(atherialAddonPreLoadEvent, atherialAddon);
+            if (atherialAddonPreLoadEvent.isCancelled()) {
+                continue;
+            }
             atherialAddon.onLoad();
             System.out.println("[AtherialApi] Enabled " + atherialAddon.getDescription().name());
         }
     }
 
-    private void loadAddon(File file, List<Class> classes) {
-        for (Class aClass : classes) {
-            if (aClass.isAnnotationPresent(AtherialAddonDescription.class) && aClass.isAssignableFrom(AtherialAddon.class)) {
-                System.out.println("true");
-                AtherialAddonDescription description = (AtherialAddonDescription) aClass.getAnnotation(AtherialAddonDescription.class);
-                try {
-                    AtherialAddon atherialAddon = (AtherialAddon) aClass.getDeclaredConstructor().newInstance();
-                    atherialAddon.setDescription(description);
-                    atherialAddonMap.put(description.name(), atherialAddon);
-                    System.out.println("[AtherialAddons] " + description.name() + " loading...");
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-
-    private   List<Class> loadClasses(File file) {
+    private  List<Class> loadClasses(File file, boolean debug) {
         List<Class> classList= new ArrayList<>();
         try {
            JarFile jarFile = new JarFile(file);
            Enumeration<JarEntry> entries = jarFile.entries();
-
            URL[] urls = {new URL("jar:file:" + file.getPath() + "!/")};
            URLClassLoader urlClassLoader = URLClassLoader.newInstance(urls);
            while (entries.hasMoreElements()) {
@@ -131,7 +130,9 @@ public class AtherialAddonManager {
                classList.add(aClass);
            }
        } catch (ClassNotFoundException | IOException e) {
-
+            if (debug) {
+                e.printStackTrace();
+            }
        }
        return classList;
     }
