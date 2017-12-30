@@ -7,12 +7,12 @@ public abstract class AtherialAddon {
     private AtherialAddonDescription description;
 
     public void onLoad() {}
+
     public void onUnload() {}
 
     public AtherialAddonManager getAddonManager() {
         return AtherialAddonManager.getInstance();
     }
-
 
     /**
      * Getter for property 'description'.
