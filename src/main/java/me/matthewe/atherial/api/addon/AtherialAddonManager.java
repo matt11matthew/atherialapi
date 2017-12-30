@@ -85,10 +85,10 @@ public class AtherialAddonManager {
         instance = this;
     }
 
-    public void loadAddons(File file, URL[] urls) {
+    public void loadAddons(File file, ClassLoader classLoader) {
         System.out.println("[AtherialApi] Loading Addons");
         if (file != null && file.exists() && (file.isDirectory()) && (file.list() != null)) {
-            List<Class> classStream = Arrays.stream(file.listFiles()).filter(file1 -> file1.getName().endsWith(".jar")).map(file1 -> loadClasses(file1, false, urls)).flatMap(Collection::stream).collect(Collectors.toList());
+            List<Class> classStream = Arrays.stream(file.listFiles()).filter(file1 -> file1.getName().endsWith(".jar")).map(file1 -> loadClasses(file1, false, classLoader)).flatMap(Collection::stream).collect(Collectors.toList());
             classStream  .forEach(aClass -> {
                 Annotation annotation = aClass.getAnnotation(AtherialAddonDescription.class);
                 if (annotation != null && annotation instanceof AtherialAddonDescription) {
@@ -120,22 +120,22 @@ public class AtherialAddonManager {
     }
 
 
-    private  List<Class> loadClasses(File file, boolean debug, URL[] urls1) {
+    private  List<Class> loadClasses(File file, boolean debug, ClassLoader classLoader) {
         List<Class> classList= new ArrayList<>();
         try {
            JarFile jarFile = new JarFile(file);
            Enumeration<JarEntry> entries = jarFile.entries();
            List<URL> urlList = Arrays.asList(new URL("jar:file:" + file.getPath() + "!/"));
-            for (URL url : urls1) {
-                urlList.add(url);
-            }
+//            for (URL url : urls1) {
+//                urlList.add(url);
+//            }
             URL[] urls = new URL[urlList.size()];
             for (int i = 0; i < urls.length; i++) {
                 urls[i] = urlList.get(i);
             }
 //           URL[] urls = {new URL("jar:file:" + file.getPath() + "!/")};
 
-           AddonClassLoader urlClassLoader = new AddonClassLoader(urls);
+
            while (entries.hasMoreElements()) {
                JarEntry jarEntry = entries.nextElement();
                if (jarEntry.isDirectory() || !jarEntry.getName().endsWith(".class")) {
@@ -143,8 +143,8 @@ public class AtherialAddonManager {
                }
                String className = jarEntry.getName().substring(0, jarEntry.getName().length() - 6);
                className = className.replace('/', '.');
-               Class aClass = urlClassLoader.loadClass(className);
-               classList.add(aClass);
+               Class aClass = classLoader.loadClass(className);
+               classList.add(aClass);   
 
            }
 

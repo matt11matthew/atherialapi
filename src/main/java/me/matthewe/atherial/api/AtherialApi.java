@@ -23,8 +23,8 @@ public class AtherialApi {
         return instance;
     }
 
-    public void loadAddons(File file, URL[] urls) {
-        AtherialAddonManager.getManager().loadAddons(file, urls);
+    public void loadAddons(File file, ClassLoader classLoader) {
+        AtherialAddonManager.getManager().loadAddons(file, classLoader);
     }
 
     public void setSpigotPlugin(boolean isSpigotPlugin) {
