@@ -78,8 +78,8 @@
         <dependency>
             <groupId>com.github.matt11matthew</groupId>
             <artifactId>atherialapi</artifactId>
-            <version>1</version>
-            <scope>compile</scope>
+            <version>3</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

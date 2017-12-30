@@ -9,5 +9,24 @@ public class TestAddon extends AtherialAddon {
     @Override
     public void onLoad() {
         System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
+        System.out.println("loaded");
     }
 }
