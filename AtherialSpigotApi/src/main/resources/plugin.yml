@@ -3,3 +3,5 @@ version: ${project.version}
 main: me.matthewe.atherial.api.spigot.AtherialSpigotApi
 authors: [MatthewE]
 description: AtherialSpigotApi
+commands:
+  addons:

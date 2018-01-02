@@ -5,6 +5,7 @@ package me.matthewe.atherial.api.addon.event;
  */
 public interface Cancellable {
     boolean isCancelled();
+
     void setCancelled(boolean b);
 }
 

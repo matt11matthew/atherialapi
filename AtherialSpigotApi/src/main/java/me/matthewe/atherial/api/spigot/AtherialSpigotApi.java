@@ -6,9 +6,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 
 public final class AtherialSpigotApi extends JavaPlugin {
+    private static AtherialSpigotApi instance;
+
+    public static AtherialSpigotApi getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
+        instance = this;
         if (!this.getDataFolder().exists()) {
             this.getDataFolder().mkdirs();
         }
@@ -19,10 +25,10 @@ public final class AtherialSpigotApi extends JavaPlugin {
 
         AtherialApi atherialApi = AtherialApi.getInstance();
         atherialApi.setSpigotPlugin(true);
-//        atherialApi.loadAddons(file);
+        atherialApi.loadAddons(file);
 
 
-    } 
+    }
 
     @Override
     public void onDisable() {

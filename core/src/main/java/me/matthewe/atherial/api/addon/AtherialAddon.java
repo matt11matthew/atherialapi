@@ -1,18 +1,25 @@
 package me.matthewe.atherial.api.addon;
 
+import net.xeoh.plugins.base.Plugin;
+import net.xeoh.plugins.base.annotations.PluginImplementation;
+import net.xeoh.plugins.base.annotations.events.Init;
+import net.xeoh.plugins.base.annotations.events.Shutdown;
+
 /**
  * Created by Matthew E on 12/30/2017.
  */
-public abstract class AtherialAddon {
+@PluginImplementation
+public abstract class AtherialAddon implements Plugin {
     private AtherialAddonDescription description;
 
-    public void onLoad() {}
-
-    public void onUnload() {}
-
-    public AtherialAddonManager getAddonManager() {
-        return AtherialAddonManager.getInstance();
+    @Init
+    public void onEnable() {
     }
+
+    @Shutdown
+    public void onDisable() {
+    }
+
 
     /**
      * Getter for property 'description'.
