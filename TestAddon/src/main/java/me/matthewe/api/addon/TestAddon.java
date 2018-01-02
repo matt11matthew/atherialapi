@@ -25,6 +25,9 @@ public class TestAddon extends AtherialAddon implements AtherialEventListener, L
         event.setJoinMessage(onAtherialJoin.getJoinMessage());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onEnable() {
         AtherialAddonManager.getManager().registerListener(this, this);

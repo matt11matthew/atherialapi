@@ -30,6 +30,11 @@ public abstract class AtherialAddon implements Plugin {
         return description;
     }
 
+    /**
+     * Setter for property 'description'.
+     *
+     * @param description Value to set for property 'description'.
+     */
     protected void setDescription(AtherialAddonDescription description) {
         this.description = description;
     }

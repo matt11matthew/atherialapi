@@ -21,12 +21,20 @@ public class AtherialAddonManager {
     private Map<String, AtherialAddon> atherialAddonMap;
     private Map<AtherialAddon, List<Class<? extends AtherialEventListener>>> atherialEventListeners;
 
+    /**
+     * Constructs a new AtherialAddonManager.
+     */
     public AtherialAddonManager() {
         this.atherialAddonMap = new HashMap<>();
         this.atherialEventListeners = new HashMap<>();
         instance = this;
     }
 
+    /**
+     * Getter for property 'manager'.
+     *
+     * @return Value for property 'manager'.
+     */
     public static AtherialAddonManager getManager() {
         if (instance == null) {
             instance = new AtherialAddonManager();
@@ -34,6 +42,11 @@ public class AtherialAddonManager {
         return instance;
     }
 
+    /**
+     * Getter for property 'instance'.
+     *
+     * @return Value for property 'instance'.
+     */
     protected static AtherialAddonManager getInstance() {
         if (instance == null) {
             instance = new AtherialAddonManager();
@@ -104,6 +117,11 @@ public class AtherialAddonManager {
         }
     }
 
+    /**
+     * Getter for property 'addonMap'.
+     *
+     * @return Value for property 'addonMap'.
+     */
     public Map<String, AtherialAddon> getAddonMap() {
         return atherialAddonMap;
     }

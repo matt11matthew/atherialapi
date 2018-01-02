@@ -16,10 +16,18 @@ public class AtherialApi {
     private static AtherialApi instance;
     private boolean isSpigotPlugin;
 
+    /**
+     * Constructs a new AtherialApi.
+     */
     public AtherialApi() {
         instance = this;
     }
 
+    /**
+     * Getter for property 'instance'.
+     *
+     * @return Value for property 'instance'.
+     */
     public static AtherialApi getInstance() {
         if (instance == null) {
             instance = new AtherialApi();
@@ -31,14 +39,29 @@ public class AtherialApi {
         AtherialAddonManager.getManager().loadAddons(file);
     }
 
+    /**
+     * Getter for property 'spigotPlugin'.
+     *
+     * @return Value for property 'spigotPlugin'.
+     */
     public boolean isSpigotPlugin() {
         return isSpigotPlugin;
     }
 
+    /**
+     * Setter for property 'spigotPlugin'.
+     *
+     * @param isSpigotPlugin Value to set for property 'spigotPlugin'.
+     */
     public void setSpigotPlugin(boolean isSpigotPlugin) {
         this.isSpigotPlugin = isSpigotPlugin;
     }
 
+    /**
+     * Getter for property 'addons'.
+     *
+     * @return Value for property 'addons'.
+     */
     public List<AtherialAddon> getAddons() {
         return new ArrayList<>(AtherialAddonManager.getManager().getAddonMap().values());
     }

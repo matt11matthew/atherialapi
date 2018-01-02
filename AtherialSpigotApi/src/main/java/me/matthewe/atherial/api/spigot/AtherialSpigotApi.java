@@ -8,10 +8,18 @@ import java.io.File;
 public final class AtherialSpigotApi extends JavaPlugin {
     private static AtherialSpigotApi instance;
 
+    /**
+     * Getter for property 'instance'.
+     *
+     * @return Value for property 'instance'.
+     */
     public static AtherialSpigotApi getInstance() {
         return instance;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onEnable() {
         instance = this;
@@ -30,8 +38,13 @@ public final class AtherialSpigotApi extends JavaPlugin {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDisable() {
         // Plugin shutdown logic
     }
 }
+
+ 
