@@ -10,8 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>core</module>
-        <module>TestAddon</module>
-        <module>AtherialSpigotApi</module>
+        <module>spigot-api</module>
     </modules>
 
 

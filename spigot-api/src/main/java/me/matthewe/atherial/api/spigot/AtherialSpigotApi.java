@@ -1,12 +1,14 @@
 package me.matthewe.atherial.api.spigot;
 
 import me.matthewe.atherial.api.AtherialApi;
+import me.matthewe.atherial.api.spigot.command.SpigotAtherialCommandHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 
 public final class AtherialSpigotApi extends JavaPlugin {
     private static AtherialSpigotApi instance;
+    private static SpigotAtherialCommandHandler atherialCommandHandler;
 
     /**
      * Getter for property 'instance'.
@@ -35,7 +37,9 @@ public final class AtherialSpigotApi extends JavaPlugin {
         atherialApi.setSpigotPlugin(true);
         atherialApi.loadAddons(file);
 
-
+        atherialCommandHandler = new SpigotAtherialCommandHandler();
+        atherialCommandHandler.registerCommand(new AddonsCommand());
+        atherialCommandHandler.registerCommands();
     }
 
     /**
