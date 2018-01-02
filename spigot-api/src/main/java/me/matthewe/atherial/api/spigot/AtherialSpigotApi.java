@@ -47,4 +47,3 @@ public final class AtherialSpigotApi extends JavaPlugin {
     }
 }
 
- 
