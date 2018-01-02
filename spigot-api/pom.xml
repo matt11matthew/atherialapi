@@ -39,6 +39,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <finalName>AtherialSpigotApi</finalName>
                             <minimizeJar>false</minimizeJar>
                         </configuration>
                     </execution>

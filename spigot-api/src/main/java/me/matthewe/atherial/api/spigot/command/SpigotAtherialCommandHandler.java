@@ -7,6 +7,7 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 /**
  * Created by Matthew E on 1/1/2018.
@@ -21,8 +22,11 @@ public class SpigotAtherialCommandHandler extends AtherialCommandHandler<SpigotA
             CommandMap spigotCommandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
             commandMap.forEach((s, spigotAtherialCommand) -> {
                 ReflectCommand reflectCommand = new ReflectCommand(spigotAtherialCommand.getAtherialCommand().name());
-                spigotCommandMap.register(reflectCommand.exe.getAtherialCommand().name(), reflectCommand);
+                reflectCommand.setAliases(Arrays.asList(spigotAtherialCommand.getAtherialCommand().aliases()));
+                reflectCommand.setDescription(spigotAtherialCommand.getAtherialCommand().description());
+                reflectCommand.setUsage(spigotAtherialCommand.getAtherialCommand().usage());
                 reflectCommand.setExecutor(spigotAtherialCommand);
+                spigotCommandMap.register(reflectCommand.exe.getAtherialCommand().name(), reflectCommand);
 
             });
         } catch (Exception e) {
@@ -33,7 +37,7 @@ public class SpigotAtherialCommandHandler extends AtherialCommandHandler<SpigotA
     private final class ReflectCommand extends Command {
         private SpigotAtherialCommand exe = null;
 
-        protected ReflectCommand(String command) {
+        public ReflectCommand(String command) {
             super(command);
         }
 

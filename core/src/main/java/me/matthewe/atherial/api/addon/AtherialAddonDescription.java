@@ -16,5 +16,7 @@ public @interface AtherialAddonDescription {
 
     String version();
 
+    String description() default "An addon";
+
     String[] authors() default {};
 }

@@ -2,6 +2,7 @@ package me.matthewe.atherial.api.spigot;
 
 import me.matthewe.atherial.api.AtherialApi;
 import me.matthewe.atherial.api.spigot.command.SpigotAtherialCommandHandler;
+import me.matthewe.atherial.api.spigot.commands.AddonsCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;

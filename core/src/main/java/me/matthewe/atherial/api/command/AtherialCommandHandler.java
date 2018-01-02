@@ -14,7 +14,11 @@ public abstract class AtherialCommandHandler<C extends DefaultAtherialCommand> {
     }
 
     public void registerCommand(C defaultAtherialCommand) {
-        commandMap.put(defaultAtherialCommand.getAtherialCommand().name(), defaultAtherialCommand);
+        AtherialCommand annotation = defaultAtherialCommand.getClass().getAnnotation(AtherialCommand.class);
+        if (annotation != null) {
+            defaultAtherialCommand.setAtherialCommand(annotation);
+            commandMap.put(annotation.name(), defaultAtherialCommand);
+        }
     }
 
     public abstract void registerCommands();
